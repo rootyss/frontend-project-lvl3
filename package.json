@@ -2,10 +2,10 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "rss reader",
-  "type": "module",
-  "main": "index.js",
+  "main": "src/init.js",
   "scripts": {
-    "test": "npx -n '--experimental-vm-modules --no-warnings' jest --colors"
+    "test": "npx -n '--experimental-vm-modules --no-warnings' jest --colors",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -19,9 +19,20 @@
   "homepage": "https://github.com/rootyss/frontend-project-lvl3#readme",
   "devDependencies": {
     "@jest/globals": "^26.6.2",
+    "css-loader": "^5.2.4",
     "eslint": "^7.25.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
-    "jest": "^26.6.3"
+    "html-webpack-plugin": "^5.3.1",
+    "jest": "^26.6.3",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.36.0",
+    "webpack-cli": "^4.6.0"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.9.2",
+    "bootstrap": "^5.0.0-beta3",
+    "jquery": "^3.6.0",
+    "popper.js": "^1.16.1"
   }
 }
