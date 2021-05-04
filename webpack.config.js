@@ -1,20 +1,27 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
+const isDev = process.env.NODE_ENV === 'development';
+
+const getFileName = (ext) => (isDev ? `[name].bundle.${ext}` : `[name].[contenthash].bundle.${ext}`);
 
 module.exports = {
-  mode: process.env.NODE_ENV || 'development',
+  context: path.resolve(__dirname, 'src'),
+  mode: 'development',
   entry: {
-    main: path.resolve(__dirname, './src/init.js'),
+    main: './init.js',
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: '[name].bundle.js',
+    filename: getFileName('js'),
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './template.html'),
       filename: 'index.html',
     }),
+    new CleanWebpackPlugin(),
   ],
   module: {
     rules: [

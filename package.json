@@ -5,7 +5,8 @@
   "main": "src/init.js",
   "scripts": {
     "test": "npx -n '--experimental-vm-modules --no-warnings' jest --colors",
-    "build": "webpack"
+    "build": "cross-env NODE_ENV=production webpack --mode production",
+    "build-dev": "cross-env NODE_ENV=development webpack --mode development"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,8 @@
   "homepage": "https://github.com/rootyss/frontend-project-lvl3#readme",
   "devDependencies": {
     "@jest/globals": "^26.6.2",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^5.2.4",
     "eslint": "^7.25.0",
     "eslint-config-airbnb-base": "^14.2.1",
