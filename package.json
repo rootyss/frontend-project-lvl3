@@ -19,7 +19,10 @@
   },
   "homepage": "https://github.com/rootyss/frontend-project-lvl3#readme",
   "devDependencies": {
+    "@babel/core": "^7.14.0",
+    "@babel/preset-env": "^7.14.1",
     "@jest/globals": "^26.6.2",
+    "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "cross-env": "^7.0.3",
     "css-loader": "^5.2.4",
