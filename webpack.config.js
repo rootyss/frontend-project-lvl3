@@ -4,7 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === 'development';
 
-const getFileName = (ext) => (isDev ? `[name].bundle.${ext}` : `[name].[contenthash].bundle.${ext}`);
+const getFileName = (ext) => (isDev ? `[name].bundle.${ext}` : `[name].[contenthash].${ext}`);
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
