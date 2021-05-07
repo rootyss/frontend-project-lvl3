@@ -1,6 +1,6 @@
 import watchedState from './watchedState.js';
 import validate from './validate.js';
-import { getStream } from './utils.js';
+import getStream from './utils.js';
 
 const form = document.querySelector('form');
 
