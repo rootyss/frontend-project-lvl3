@@ -1,5 +1,6 @@
 const state = {
   rssForm: {
+    state: 'filling',
     errors: '',
   },
   feeds: [],
