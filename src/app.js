@@ -1,17 +1,11 @@
 import onChange from 'on-change';
-import { validate, getStream } from './utils.js';
+import { validate, getStream, parse } from './utils.js';
 import state from './state.js';
-import renderErrors from './renderErrors.js';
+import render from './render.js';
 
 const app = () => {
-  const watchedState = onChange(state, (path, value) => {
-    switch (path) {
-      case 'rssForm.errors':
-        renderErrors(value);
-        break;
-      default:
-        break;
-    }
+  const watchedState = onChange(state, () => {
+    render(state);
   });
 
   const form = document.querySelector('form');
@@ -21,9 +15,19 @@ const app = () => {
     const formData = new FormData(e.target);
     const inputUrl = formData.get('url');
     watchedState.rssForm.errors = validate(inputUrl);
+    if (watchedState.rssForm.errors) {
+      return;
+    }
     const data = getStream(inputUrl);
-    data.then((response) => console.log(response.data.contents));
+    data.then((response) => {
+      const datas = parse(response.data.contents);
+      if (!data) {
+        watchedState.rssForm.errors = null;
+      }
+      console.log(datas);
+    });
   });
+  render(watchedState);
 };
 
 app();

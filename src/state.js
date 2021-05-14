@@ -1,7 +1,7 @@
 const state = {
   rssForm: {
     state: 'filling',
-    errors: '',
+    errors: null,
   },
   feeds: [],
   posts: [],
