@@ -3,7 +3,6 @@ const renderErrors = (errors) => {
   const input = document.querySelector('input');
 
   if (!errors) {
-    feedbackEl.textContent = '';
     feedbackEl.classList.remove('text-danger');
     input.classList.remove('is-invalid');
     return;

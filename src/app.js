@@ -1,5 +1,7 @@
 import onChange from 'on-change';
-import { validate, getStream, parse } from './utils.js';
+import {
+  validate, getStream, parse, addNormalizedData,
+} from './utils.js';
 import state from './state.js';
 import render from './render.js';
 
@@ -8,24 +10,33 @@ const app = () => {
     render(state);
   });
 
+  const feedbackEl = document.querySelector('.feedback');
   const form = document.querySelector('form');
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
     const inputUrl = formData.get('url');
     watchedState.rssForm.errors = validate(inputUrl);
     if (watchedState.rssForm.errors) {
       return;
     }
-    const data = getStream(inputUrl);
-    data.then((response) => {
-      const datas = parse(response.data.contents);
-      if (!data) {
-        watchedState.rssForm.errors = null;
-      }
-      console.log(datas);
-    });
+    if (watchedState.rss.includes(inputUrl)) {
+      watchedState.rssForm.errors = 'RSS уже добавлен';
+      return;
+    }
+    watchedState.rss.push(inputUrl);
+    const stream = getStream(inputUrl);
+    stream.then((response) => {
+      const data = parse(response.data.contents);
+      feedbackEl.textContent = 'Данные загружены';
+      feedbackEl.classList.add('text-success');
+      addNormalizedData(data, watchedState);
+      console.log(state);
+    })
+      .catch((e) => {
+        watchedState.rssForm.errors = e.message;
+      });
   });
   render(watchedState);
 };

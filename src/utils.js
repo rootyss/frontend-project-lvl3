@@ -18,7 +18,7 @@ const parse = (data) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(data, 'application/xml');
   if (doc.getElementsByTagName('parsererror').length > 0) {
-    return null;
+    throw new Error('Отсутствует валидный RSS');
   }
   const title = doc.querySelector('channel > title').textContent;
   const description = doc.querySelector('channel > description').textContent;
@@ -31,4 +31,21 @@ const parse = (data) => {
   return { title, description, posts };
 };
 
-export { getStream, validate, parse };
+const addNormalizedData = (data, state) => {
+  const currentFeedID = state.feeds.length + 1;
+  let currentPostID = state.posts.length + 1;
+
+  const { title, description, posts } = data;
+  state.feeds.push({ id: currentFeedID, title, description });
+  posts.forEach((post) => {
+    const { itemTitle, link } = post;
+    state.posts.push({
+      feedID: currentFeedID, id: currentPostID, title: itemTitle, link,
+    });
+    currentPostID += 1;
+  });
+};
+
+export {
+  getStream, validate, parse, addNormalizedData,
+};

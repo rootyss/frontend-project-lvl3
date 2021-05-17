@@ -3,6 +3,7 @@ const state = {
     state: 'filling',
     errors: null,
   },
+  rss: [],
   feeds: [],
   posts: [],
 };
