@@ -30,7 +30,6 @@ const genFeedsElements = (feeds) => {
 };
 
 const genPostsElements = (posts) => {
-  console.log(posts);
   if (posts.length < 1) return null;
   const h2El = document.createElement('H2');
   h2El.textContent = 'Посты';

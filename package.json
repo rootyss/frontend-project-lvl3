@@ -39,6 +39,7 @@
     "@popperjs/core": "^2.9.2",
     "axios": "^0.21.1",
     "bootstrap": "^5.0.0-beta3",
+    "i18next": "^20.2.4",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "on-change": "^3.0.1",

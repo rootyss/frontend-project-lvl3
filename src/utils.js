@@ -41,7 +41,11 @@ const addNormalizedData = (data, state) => {
   posts.forEach((post) => {
     const { itemTitle, link, descriptionPost } = post;
     state.posts.push({
-      feedID: currentFeedID, id: currentPostID, title: itemTitle, link, description: descriptionPost
+      feedID: currentFeedID,
+      id: currentPostID,
+      title: itemTitle,
+      link,
+      description: descriptionPost,
     });
     currentPostID += 1;
   });

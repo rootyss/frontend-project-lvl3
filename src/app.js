@@ -1,4 +1,6 @@
 import onChange from 'on-change';
+import i18n from 'i18next';
+
 import {
   validate, getStream, parse, addNormalizedData,
 } from './utils.js';
