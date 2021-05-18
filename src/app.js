@@ -10,31 +10,36 @@ const app = () => {
     render(state);
   });
 
-  const feedbackEl = document.querySelector('.feedback');
   const form = document.querySelector('form');
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
+    watchedState.rssForm.state = 'sending';
+
     const formData = new FormData(event.target);
     const inputUrl = formData.get('url');
+
     watchedState.rssForm.errors = validate(inputUrl);
     if (watchedState.rssForm.errors) {
       return;
     }
+
     if (watchedState.rss.includes(inputUrl)) {
       watchedState.rssForm.errors = 'RSS уже добавлен';
       return;
     }
+
     watchedState.rss.push(inputUrl);
+
     const stream = getStream(inputUrl);
+
     stream.then((response) => {
       const data = parse(response.data.contents);
-      feedbackEl.textContent = 'Данные загружены';
-      feedbackEl.classList.add('text-success');
       addNormalizedData(data, watchedState);
-      console.log(state);
+      watchedState.rssForm.state = 'finished';
     })
       .catch((e) => {
+        watchedState.rssForm.state = 'failed';
         watchedState.rssForm.errors = e.message;
       });
   });

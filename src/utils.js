@@ -26,7 +26,8 @@ const parse = (data) => {
   const posts = [...items].map((item) => {
     const itemTitle = item.querySelector('title').textContent;
     const link = item.querySelector('link').textContent;
-    return { itemTitle, link };
+    const descriptionPost = item.querySelector('description').textContent;
+    return { itemTitle, link, descriptionPost };
   });
   return { title, description, posts };
 };
@@ -38,9 +39,9 @@ const addNormalizedData = (data, state) => {
   const { title, description, posts } = data;
   state.feeds.push({ id: currentFeedID, title, description });
   posts.forEach((post) => {
-    const { itemTitle, link } = post;
+    const { itemTitle, link, descriptionPost } = post;
     state.posts.push({
-      feedID: currentFeedID, id: currentPostID, title: itemTitle, link,
+      feedID: currentFeedID, id: currentPostID, title: itemTitle, link, description: descriptionPost
     });
     currentPostID += 1;
   });
