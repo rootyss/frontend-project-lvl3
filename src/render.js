@@ -12,10 +12,10 @@ const renderErrors = (errors) => {
   input.classList.add('is-invalid');
 };
 
-const genFeedsElements = (feeds) => {
+const genFeedsElements = (feeds, i18nInstance) => {
   if (feeds.length < 1) return null;
   const h2El = document.createElement('H2');
-  h2El.textContent = 'Фиды';
+  h2El.textContent = i18nInstance.t('feeds');
   const container = document.createElement('DIV');
   container.classList.add('col-md-10', 'col-lg-8', 'mx-auto', 'feeds');
   const ulEl = document.createElement('UL');
@@ -29,10 +29,10 @@ const genFeedsElements = (feeds) => {
   return container;
 };
 
-const genPostsElements = (posts) => {
+const genPostsElements = (posts, i18nInstance) => {
   if (posts.length < 1) return null;
   const h2El = document.createElement('H2');
-  h2El.textContent = 'Посты';
+  h2El.textContent = i18nInstance.t('posts');
   const container = document.createElement('DIV');
   container.classList.add('col-md-10', 'col-lg-8', 'mx-auto', 'posts');
   const ulEl = document.createElement('UL');
@@ -48,7 +48,7 @@ const genPostsElements = (posts) => {
   return container;
 };
 
-export default (state) => {
+export default (state, i18nInstance) => {
   const submitButton = document.querySelector('button');
   const feedbackEl = document.querySelector('.feedback');
   const feedsContainer = document.querySelector('.feeds');
@@ -68,20 +68,20 @@ export default (state) => {
       submitButton.disabled = true;
       break;
     case 'finished':
-      feedbackEl.textContent = 'Данные загружены';
+      feedbackEl.textContent = i18nInstance.t('result');
       feedbackEl.classList.add('text-success');
       break;
     default:
       throw new Error('Unknown error');
   }
-  if (!genFeedsElements(state.feeds)) {
+  if (!genFeedsElements(state.feeds, i18nInstance)) {
     return;
   }
-  feedsContainer.replaceWith(genFeedsElements(state.feeds));
-  if (!genPostsElements(state.posts)) {
+  feedsContainer.replaceWith(genFeedsElements(state.feeds, i18nInstance));
+  if (!genPostsElements(state.posts, i18nInstance)) {
     return;
   }
-  postsContainer.replaceWith(genPostsElements(state.posts));
+  postsContainer.replaceWith(genPostsElements(state.posts, i18nInstance));
 
   input.focus();
 };

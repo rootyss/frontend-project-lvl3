@@ -1,6 +1,6 @@
 import onChange from 'on-change';
 import i18n from 'i18next';
-
+import resources from './locale.js';
 import {
   validate, getStream, parse, addNormalizedData,
 } from './utils.js';
@@ -9,8 +9,16 @@ import render from './render.js';
 
 const app = () => {
   const watchedState = onChange(state, () => {
-    render(state);
+    render(state, i18nInstance);
   });
+
+  const i18nInstance = i18n.createInstance();
+  i18nInstance
+    .init({
+      lng: 'ru',
+      debug: false,
+      resources,
+    }).then((t) => { render(watchedState, i18nInstance); });
 
   const form = document.querySelector('form');
 
@@ -45,7 +53,7 @@ const app = () => {
         watchedState.rssForm.errors = e.message;
       });
   });
-  render(watchedState);
+  render(watchedState, i18nInstance);
 };
 
 app();
