@@ -1,24 +1,21 @@
 import axios from 'axios';
-import * as yup from 'yup';
 
-const getStream = (url) => axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(url)}`);
-
-const schema = yup.string().url('Ссылка должна быть валидным URL');
-
-const validate = (url) => {
-  try {
-    schema.validateSync(url);
-    return null;
-  } catch (e) {
-    return e.message;
-  }
+const getCorsUrl = (url) => {
+  const corsProxyUrl = new URL('/get', 'https://hexlet-allorigins.herokuapp.com');
+  corsProxyUrl.searchParams.set('disableCache', 'true');
+  corsProxyUrl.searchParams.set('url', url);
+  return corsProxyUrl.toString();
 };
+const getStream = (url) => axios.get(getCorsUrl(url));
 
 const parse = (data) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(data, 'application/xml');
-  if (doc.getElementsByTagName('parsererror').length > 0) {
-    throw new Error('Отсутствует валидный RSS');
+  const parsererror = doc.querySelector('parsererror');
+  if (parsererror) {
+    const error = new Error('parser');
+    error.isParserError = true;
+    throw error;
   }
   const title = doc.querySelector('channel > title').textContent;
   const description = doc.querySelector('channel > description').textContent;
@@ -32,12 +29,14 @@ const parse = (data) => {
   return { title, description, posts };
 };
 
-const addNormalizedData = (data, state) => {
+const addNormalizedData = (data, state, url) => {
   const currentFeedID = state.feeds.length + 1;
   let currentPostID = state.posts.length + 1;
 
   const { title, description, posts } = data;
-  state.feeds.push({ id: currentFeedID, title, description });
+  state.feeds.push({
+    url, id: currentFeedID, title, description,
+  });
   posts.forEach((post) => {
     const { itemTitle, link, descriptionPost } = post;
     state.posts.push({
@@ -52,5 +51,5 @@ const addNormalizedData = (data, state) => {
 };
 
 export {
-  getStream, validate, parse, addNormalizedData,
+  getStream, parse, addNormalizedData,
 };

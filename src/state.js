@@ -1,11 +1,10 @@
-const state = {
+export default {
   rssForm: {
     state: 'filling',
-    errors: null,
+    error: null,
   },
   rss: [],
   feeds: [],
   posts: [],
+  visitedPostsId: [],
 };
-
-export default state;

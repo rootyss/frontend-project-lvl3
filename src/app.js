@@ -1,11 +1,11 @@
-import onChange from 'on-change';
 import i18n from 'i18next';
-import resources from './locale.js';
+import * as yup from 'yup';
+import resources from './locale';
 import {
-  validate, getStream, parse, addNormalizedData,
+  getStream, parse, addNormalizedData,
 } from './utils.js';
 import state from './state.js';
-import render from './render.js';
+import initView from './render.js';
 
 const app = () => {
   const i18nInstance = i18n.createInstance();
@@ -15,43 +15,82 @@ const app = () => {
       debug: false,
       resources,
     }).then(() => {
-      const watchedState = onChange(state, () => {
-        render(state, i18nInstance);
+      yup.setLocale({
+        string: {
+          url: 'url',
+        },
+        mixed: {
+          notOneOf: 'doubleUrl',
+        },
       });
-      const form = document.querySelector('form');
 
-      form.addEventListener('submit', (event) => {
+      const elements = {
+        form: document.querySelector('form'),
+        input: document.querySelector('input'),
+        submitButton: document.querySelector('button'),
+        feedbackEl: document.querySelector('.feedback'),
+        feedsContainer: document.querySelector('.feeds'),
+        postsContainer: document.querySelector('.posts'),
+      };
+
+      const watchedState = initView(state, elements, i18nInstance);
+
+      const validate = (value) => {
+        const schema = yup.object().shape({
+          url: yup
+            .string()
+            .url()
+            .notOneOf(watchedState.feeds.map(({ url }) => url)),
+        });
+        try {
+          schema.validateSync(value);
+          return null;
+        } catch (e) {
+          return e.message;
+        }
+      };
+
+      elements.form.addEventListener('submit', (event) => {
         event.preventDefault();
         watchedState.rssForm.state = 'sending';
 
         const formData = new FormData(event.target);
         const inputUrl = formData.get('url');
 
-        watchedState.rssForm.errors = validate(inputUrl);
-        if (watchedState.rssForm.errors) {
-          return;
+        watchedState.rssForm.state = 'sending';
+        const error = validate({ url: inputUrl });
+        if (error) {
+          watchedState.rssForm.error = error;
+          watchedState.rssForm.state = 'failed';
+        } else {
+          const stream = getStream(inputUrl);
+
+          stream.then((response) => {
+            const data = parse(response.data.contents);
+            addNormalizedData(data, watchedState, inputUrl);
+            watchedState.rssForm.error = null;
+            watchedState.rssForm.state = 'finished';
+          })
+            .catch((e) => {
+              if (e.request) {
+                watchedState.rssForm.error = 'network';
+              } else if (e.isParserError) {
+                watchedState.rssForm.error = e.message;
+              } else {
+                watchedState.rssForm.error = 'unknown';
+              }
+              watchedState.rssForm.state = 'failed';
+            });
         }
-
-        if (watchedState.rss.includes(inputUrl)) {
-          watchedState.rssForm.errors = 'RSS уже добавлен';
-          return;
-        }
-
-        watchedState.rss.push(inputUrl);
-
-        const stream = getStream(inputUrl);
-
-        stream.then((response) => {
-          const data = parse(response.data.contents);
-          addNormalizedData(data, watchedState);
-          watchedState.rssForm.state = 'finished';
-        })
-          .catch((e) => {
-            watchedState.rssForm.state = 'failed';
-            watchedState.rssForm.errors = e.message;
-          });
       });
-      render(watchedState, i18nInstance);
+
+      elements.postsContainer.addEventListener('click', (e) => {
+        const targetId = e.target.dataset.id;
+
+        if (targetId && !watchedState.visitedPostsId.includes(String(targetId))) {
+          watchedState.visitedPostsId.push(targetId);
+        }
+      });
     });
   return i18nInstance;
 };
