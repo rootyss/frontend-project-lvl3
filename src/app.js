@@ -5,7 +5,6 @@ import resources from './locale';
 import {
   getStream, parse, addID,
 } from './utils.js';
-import state from './state.js';
 import initView from './render.js';
 
 const loadDelay = 5000;
@@ -49,6 +48,18 @@ const loadPosts = (watchedState, inputUrl) => {
 };
 
 export default () => {
+  const state = {
+    rssForm: {
+      state: 'filling',
+      error: null,
+    },
+    rss: [],
+    feeds: [],
+    posts: [],
+    postId: null,
+    visitedPostsId: [],
+  };
+
   const i18nInstance = i18n.createInstance();
   i18nInstance
     .init({
