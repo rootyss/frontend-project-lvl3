@@ -71,12 +71,13 @@ const renderPostsElements = (state, elements, i18nInstance) => {
     liEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start');
 
     const aEl = document.createElement('A');
-    aEl.classList.add('fw-bold', 'text-decoration-none');
-
+    aEl.classList.add('text-decoration-none');
     const font = state.visitedPostsId.includes(String(id)) ? 'fw-normal' : 'fw-bold';
+    aEl.classList.add(font);
     const aElAttributes = {
-      href: link, class: font, 'data-id': id, target: '_blank', rel: 'noopener noreferrer',
+      href: link, 'data-id': id, target: '_blank', rel: 'noopener noreferrer',
     };
+
     getAttr(aEl, aElAttributes);
     aEl.textContent = itemTitle;
 
