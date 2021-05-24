@@ -10,16 +10,20 @@ const processStateHandler = (state, elements, i18nInstance) => {
   } = elements;
   switch (state.rssForm.state) {
     case 'failed':
+      input.readOnly = false;
       submitButton.disabled = false;
       break;
     case 'filling':
+      input.readOnly = false;
       submitButton.disabled = false;
       break;
     case 'sending':
+      input.readOnly = true;
       submitButton.disabled = true;
       break;
     case 'finished':
       submitButton.disabled = false;
+      input.readOnly = false;
       feedbackEl.removeAttribute('class');
       feedbackEl.classList.add('text-success', 'feedback');
       input.classList.remove('is-invalid');

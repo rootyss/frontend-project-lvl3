@@ -52,6 +52,7 @@ export default () => {
     rssForm: {
       state: 'filling',
       error: null,
+      valid: true,
     },
     rss: [],
     feeds: [],
@@ -116,9 +117,11 @@ export default () => {
         watchedState.rssForm.state = 'sending';
         const error = validate({ url: inputUrl });
         if (error) {
+          watchedState.rssForm.valid = false;
           watchedState.rssForm.error = error;
           watchedState.rssForm.state = 'failed';
         } else {
+          watchedState.rssForm.valid = true;
           loadPosts(watchedState, inputUrl);
         }
       });
