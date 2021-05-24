@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "rss reader",
-  "main": "src/init.js",
+  "main": "src/app.js",
   "scripts": {
     "test": "npx -n '--experimental-vm-modules --no-warnings' jest --colors",
     "build": "cross-env NODE_ENV=production webpack --mode production",
