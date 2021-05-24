@@ -68,10 +68,14 @@ const app = () => {
       const elements = {
         form: document.querySelector('form'),
         input: document.querySelector('input'),
-        submitButton: document.querySelector('button'),
+        submitButton: document.querySelector('button[type=submit]'),
         feedbackEl: document.querySelector('.feedback'),
         feedsContainer: document.querySelector('.feeds'),
         postsContainer: document.querySelector('.posts'),
+        modalTitle: document.querySelector('.modal-title'),
+        modalBody: document.querySelector('.modal-body'),
+        closeModal: document.querySelector('.btn-secondary'),
+        readMore: document.querySelector('.full-article'),
       };
 
       const watchedState = initView(state, elements, i18nInstance);
@@ -114,6 +118,7 @@ const app = () => {
         if (targetId && !watchedState.visitedPostsId.includes(String(targetId))) {
           watchedState.visitedPostsId.push(targetId);
         }
+        watchedState.postId = targetId;
       });
       setTimeout(function refresh() {
         loadNewPosts(watchedState);

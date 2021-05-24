@@ -11,5 +11,9 @@ export default {
       unknown: 'Неизвестная ошибка',
       parser: 'Отсутствует валидный RSS',
     },
+    modal: {
+      close: 'Закрыть',
+      readMore: 'Читать в источнике',
+    },
   },
 };

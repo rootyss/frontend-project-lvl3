@@ -6,5 +6,6 @@ export default {
   rss: [],
   feeds: [],
   posts: [],
+  postId: null,
   visitedPostsId: [],
 };

@@ -19,6 +19,7 @@ const processStateHandler = (state, elements, i18nInstance) => {
       submitButton.disabled = true;
       break;
     case 'finished':
+      submitButton.disabled = false;
       feedbackEl.textContent = i18nInstance.t('result');
       feedbackEl.removeAttribute('class');
       feedbackEl.classList.add('text-success', 'feedback');
@@ -82,7 +83,7 @@ const renderPostsElements = (state, elements, i18nInstance) => {
     const buttonEl = document.createElement('BUTTON');
     buttonEl.classList.add('btn', 'btn-primary', 'btn-sm');
     const buttonAttr = {
-      type: 'button', 'data-id': id, 'data-toggle': 'modal', 'data-target': '#modal',
+      type: 'button', 'data-id': id, 'data-bs-toggle': 'modal', 'data-bs-target': '#readme',
     };
     getAttr(buttonEl, buttonAttr);
     buttonEl.textContent = i18nInstance.t('view');
@@ -91,6 +92,18 @@ const renderPostsElements = (state, elements, i18nInstance) => {
   });
   postsContainer.innerHTML = '';
   postsContainer.append(h2El, ulEl);
+};
+
+const renderModal = (state, elements, i18nInstance) => {
+  const {
+    modalTitle, modalBody, closeModal, readMore,
+  } = elements;
+  const [targetPost] = state.posts.filter((el) => el.id === Number(state.postId));
+  modalTitle.textContent = targetPost.itemTitle;
+  modalBody.textContent = targetPost.descriptionPost;
+  closeModal.textContent = i18nInstance.t('modal.close');
+  readMore.textContent = i18nInstance.t('modal.readMore');
+  readMore.setAttribute('href', targetPost.link);
 };
 
 export default (state, elements, i18nInstance) => onChange(state, (path) => {
@@ -109,6 +122,9 @@ export default (state, elements, i18nInstance) => onChange(state, (path) => {
       break;
     case 'visitedPostsId':
       renderPostsElements(state, elements, i18nInstance);
+      break;
+    case 'postId':
+      renderModal(state, elements, i18nInstance);
       break;
     default:
       break;
