@@ -9,9 +9,7 @@ const getFileName = (ext) => (isDev ? `[name].bundle.${ext}` : `[name].[contenth
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
-  entry: {
-    main: './init.js',
-  },
+  entry: './init.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: getFileName('js'),
