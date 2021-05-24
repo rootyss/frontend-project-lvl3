@@ -127,5 +127,3 @@ export default () => {
     });
   return i18nInstance;
 };
-
-
