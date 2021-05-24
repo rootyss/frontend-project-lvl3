@@ -105,7 +105,7 @@ const renderModal = (state, elements, i18nInstance) => {
   const {
     modalTitle, modalBody, closeModal, readMore,
   } = elements;
-  const [targetPost] = state.posts.filter((el) => el.id === Number(state.postId));
+  const [targetPost] = state.posts.filter((el) => el.id === state.postId);
   modalTitle.textContent = targetPost.itemTitle;
   modalBody.textContent = targetPost.descriptionPost;
   closeModal.textContent = i18nInstance.t('modal.close');
