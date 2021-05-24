@@ -48,7 +48,7 @@ const loadPosts = (watchedState, inputUrl) => {
     });
 };
 
-const app = () => {
+export default () => {
   const i18nInstance = i18n.createInstance();
   i18nInstance
     .init({
@@ -128,4 +128,4 @@ const app = () => {
   return i18nInstance;
 };
 
-app();
+
