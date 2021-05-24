@@ -3,9 +3,11 @@ import * as yup from 'yup';
 import _ from 'lodash';
 import resources from './locale';
 import {
-  getStream, parse, addID,
+  getStream, parse,
 } from './utils.js';
 import initView from './render.js';
+
+const addID = (posts) => posts.map((post) => ({ id: _.uniqueId(), ...post }));
 
 const loadDelay = 5000;
 
@@ -27,7 +29,7 @@ const loadPosts = (watchedState, inputUrl) => {
 
   stream.then((response) => {
     const { title, description, posts } = parse(response.data.contents);
-    oldPosts.push(...addID(posts, watchedState));
+    oldPosts.push(...addID(posts));
     feeds.unshift({
       title, description,
     });

@@ -29,14 +29,6 @@ const parse = (data) => {
   return { title, description, posts };
 };
 
-const addID = (posts, state) => {
-  let currentPostID = state.posts.length;
-  return posts.map((post) => {
-    currentPostID += 1;
-    return { id: currentPostID, ...post };
-  });
-};
-
 export {
-  getStream, parse, addID,
+  getStream, parse,
 };
