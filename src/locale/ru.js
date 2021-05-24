@@ -3,13 +3,13 @@ export default {
     feeds: 'Фиды',
     posts: 'Посты',
     view: 'Просмотр',
-    result: 'Данные загружены',
+    result: 'RSS успешно загружен',
     errors: {
       url: 'Ссылка должна быть валидным URL',
       doubleUrl: 'RSS уже существует',
-      network: 'Проблема с сетью',
+      network: 'Ошибка сети',
       unknown: 'Неизвестная ошибка',
-      parser: 'Отсутствует валидный RSS',
+      parser: 'Ресурс не содержит валидный RSS',
     },
     modal: {
       close: 'Закрыть',
