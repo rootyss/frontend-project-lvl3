@@ -78,6 +78,8 @@ const renderPostsElements = (state, elements, i18nInstance) => {
     aEl.classList.add('text-decoration-none');
     const font = state.visitedPostsId.includes(String(id)) ? 'fw-normal' : 'fw-bold';
     aEl.classList.add(font);
+    const fontForCheck = state.visitedPostsId.includes(String(id)) ? 'font-weight-normal' : 'font-weight-bold';
+    aEl.classList.add(fontForCheck);
     const aElAttributes = {
       href: link, 'data-id': id, target: '_blank', rel: 'noopener noreferrer',
     };
