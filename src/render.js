@@ -20,10 +20,10 @@ const processStateHandler = (state, elements, i18nInstance) => {
       break;
     case 'finished':
       submitButton.disabled = false;
-      feedbackEl.textContent = i18nInstance.t('result');
       feedbackEl.removeAttribute('class');
       feedbackEl.classList.add('text-success', 'feedback');
       input.classList.remove('is-invalid');
+      feedbackEl.textContent = i18nInstance.t('result');
       form.reset();
       input.focus();
       break;
