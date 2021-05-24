@@ -65,7 +65,7 @@ const renderPostsElements = (state, elements, i18nInstance) => {
   h2El.textContent = i18nInstance.t('posts');
   const ulEl = document.createElement('UL');
   ulEl.classList.add('list-group');
-  state.posts.forEach(({ link, title, id }) => {
+  state.posts.forEach(({ link, itemTitle, id }) => {
     const liEl = document.createElement('LI');
     liEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start');
 
@@ -77,7 +77,7 @@ const renderPostsElements = (state, elements, i18nInstance) => {
       href: link, class: font, 'data-id': id, target: '_blank', rel: 'noopener noreferrer',
     };
     getAttr(aEl, aElAttributes);
-    aEl.textContent = title;
+    aEl.textContent = itemTitle;
 
     const buttonEl = document.createElement('BUTTON');
     buttonEl.classList.add('btn', 'btn-primary', 'btn-sm');

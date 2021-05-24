@@ -29,27 +29,14 @@ const parse = (data) => {
   return { title, description, posts };
 };
 
-const addNormalizedData = (data, state, url) => {
-  const currentFeedID = state.feeds.length + 1;
-  let currentPostID = state.posts.length + 1;
-
-  const { title, description, posts } = data;
-  state.feeds.push({
-    url, id: currentFeedID, title, description,
-  });
-  posts.forEach((post) => {
-    const { itemTitle, link, descriptionPost } = post;
-    state.posts.push({
-      feedID: currentFeedID,
-      id: currentPostID,
-      title: itemTitle,
-      link,
-      description: descriptionPost,
-    });
+const addID = (posts, state) => {
+  let currentPostID = state.posts.length;
+  return posts.map((post) => {
     currentPostID += 1;
+    return { id: currentPostID, ...post };
   });
 };
 
 export {
-  getStream, parse, addNormalizedData,
+  getStream, parse, addID,
 };

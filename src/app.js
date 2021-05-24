@@ -1,11 +1,52 @@
 import i18n from 'i18next';
 import * as yup from 'yup';
+import _ from 'lodash';
 import resources from './locale';
 import {
-  getStream, parse, addNormalizedData,
+  getStream, parse, addID,
 } from './utils.js';
 import state from './state.js';
 import initView from './render.js';
+
+const loadDelay = 5000;
+
+const loadNewPosts = (watchedState) => {
+  watchedState.rss.forEach((url) => {
+    getStream(url).then((response) => {
+      const { posts } = parse(response.data.contents);
+      const newPosts = _.differenceBy(watchedState.posts, posts, 'title');
+      watchedState.posts.push(...addID(newPosts));
+    }).catch(() => {});
+  });
+};
+
+const loadPosts = (watchedState, inputUrl) => {
+  const {
+    posts: oldPosts, feeds, rss, rssForm,
+  } = watchedState;
+  const stream = getStream(inputUrl);
+
+  stream.then((response) => {
+    const { title, description, posts } = parse(response.data.contents);
+    oldPosts.push(...addID(posts, watchedState));
+    feeds.unshift({
+      title, description,
+    });
+    rss.push(inputUrl);
+    rssForm.error = null;
+    rssForm.state = 'finished';
+  })
+    .catch((e) => {
+      if (e.request) {
+        rssForm.error = 'network';
+      } else if (e.isParserError) {
+        rssForm.error = e.message;
+      } else {
+        rssForm.error = 'unknown';
+      }
+      rssForm.state = 'failed';
+    });
+};
 
 const app = () => {
   const i18nInstance = i18n.createInstance();
@@ -40,7 +81,7 @@ const app = () => {
           url: yup
             .string()
             .url()
-            .notOneOf(watchedState.feeds.map(({ url }) => url)),
+            .notOneOf(watchedState.rss),
         });
         try {
           schema.validateSync(value);
@@ -63,24 +104,7 @@ const app = () => {
           watchedState.rssForm.error = error;
           watchedState.rssForm.state = 'failed';
         } else {
-          const stream = getStream(inputUrl);
-
-          stream.then((response) => {
-            const data = parse(response.data.contents);
-            addNormalizedData(data, watchedState, inputUrl);
-            watchedState.rssForm.error = null;
-            watchedState.rssForm.state = 'finished';
-          })
-            .catch((e) => {
-              if (e.request) {
-                watchedState.rssForm.error = 'network';
-              } else if (e.isParserError) {
-                watchedState.rssForm.error = e.message;
-              } else {
-                watchedState.rssForm.error = 'unknown';
-              }
-              watchedState.rssForm.state = 'failed';
-            });
+          loadPosts(watchedState, inputUrl);
         }
       });
 
@@ -91,6 +115,10 @@ const app = () => {
           watchedState.visitedPostsId.push(targetId);
         }
       });
+      setTimeout(function refresh() {
+        loadNewPosts(watchedState);
+        setTimeout(refresh, loadDelay);
+      }, loadDelay);
     });
   return i18nInstance;
 };
