@@ -7,6 +7,11 @@ const isDev = process.env.NODE_ENV === 'development';
 const getFileName = (ext) => (isDev ? `[name].bundle.${ext}` : `[name].[contenthash].${ext}`);
 
 module.exports = {
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 3000,
+  },
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
   entry: './index.js',
