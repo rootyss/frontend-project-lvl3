@@ -136,6 +136,7 @@ export default () => {
         if (targetId && !watchedState.visitedPostsId.includes(targetId)) {
           watchedState.visitedPostsId.push(targetId);
         }
+        else if (!targetId) return;
         watchedState.postId = targetId;
       });
       setTimeout(function refresh() {
