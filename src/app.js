@@ -24,12 +24,6 @@ const loadNewPosts = (watchedState) => {
   })
 };
 
-const f = (watchedState) => {
-
-  const a = links.map((link) => loadNewPosts(watchedState, link));
-  console.log(a);
-};
-
 const genError = (state, e) => {
   const { rssForm } = state;
   if (e.isAxiosError) {
