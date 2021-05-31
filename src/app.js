@@ -21,7 +21,7 @@ const loadNewPosts = (watchedState) => {
       const newPosts = _.differenceBy(posts, postsCurrentFeed, 'itemTitle');
       watchedState.posts.unshift(...addID(newPosts, feedId));
     }).catch(() => {});
-  })
+  });
 };
 
 const genError = (state, e) => {
@@ -33,7 +33,7 @@ const genError = (state, e) => {
   } else {
     rssForm.error = 'unknown';
   }
-}
+};
 
 const loadPosts = (watchedState, inputUrl) => {
   const {
@@ -54,7 +54,7 @@ const loadPosts = (watchedState, inputUrl) => {
     .catch((e) => {
       genError(watchedState, e);
       rssForm.state = 'failed';
-    })
+    });
 };
 
 export default () => {
