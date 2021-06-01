@@ -131,7 +131,8 @@ export default () => {
       elements.postsContainer.addEventListener('click', (e) => {
         const targetId = e.target.dataset.id;
         if (!targetId) return;
-        if (!watchedState.visitedPostsId.includes(targetId)) {
+
+        if (targetId && !watchedState.visitedPostsId.includes(targetId)) {
           watchedState.visitedPostsId.push(targetId);
         }
         watchedState.postId = targetId;
