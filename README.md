@@ -9,8 +9,16 @@ RSS Reader
 ```sh
 https://frontend-project-lvl3-tau-ten.vercel.app/
 ```
-
-## Start
+## How use
+### Start
+```sh
+make install
+```
+### Start
 ```sh
 make build
+```
+### Server
+```sh
+make work #run server
 ```

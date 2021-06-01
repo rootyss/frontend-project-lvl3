@@ -24,15 +24,13 @@ const loadNewPosts = (watchedState) => {
   });
 };
 
-const genError = (state, e) => {
-  const { rssForm } = state;
+const getTypeError = (e) => {
   if (e.isAxiosError) {
-    rssForm.error = 'network';
-  } else if (e.isParserError) {
-    rssForm.error = e.message;
-  } else {
-    rssForm.error = 'unknown';
+    return 'network';
+  } if (e.isParserError) {
+    return 'parser';
   }
+  return 'unknown';
 };
 
 const loadPosts = (watchedState, inputUrl) => {
@@ -52,7 +50,7 @@ const loadPosts = (watchedState, inputUrl) => {
     rssForm.state = 'finished';
   })
     .catch((e) => {
-      genError(watchedState, e);
+      rssForm.error = getTypeError(e);
       rssForm.state = 'failed';
     });
 };
@@ -101,8 +99,8 @@ export default () => {
 
       const watchedState = initView(state, elements, i18nInstance);
 
-      const validate = (value) => {
-        const schema = yup.string().url().notOneOf(watchedState.feeds.map((feed) => feed.link));
+      const validate = (value, feeds) => {
+        const schema = yup.string().required().url().notOneOf(feeds.map((feed) => feed.link));
         try {
           schema.validateSync(value);
           return null;
@@ -119,7 +117,7 @@ export default () => {
         const inputUrl = formData.get('url').trim();
 
         watchedState.rssForm.state = 'sending';
-        const error = validate(inputUrl);
+        const error = validate(inputUrl, watchedState.feeds);
         if (error) {
           watchedState.rssForm.valid = false;
           watchedState.rssForm.error = error;
@@ -132,10 +130,10 @@ export default () => {
 
       elements.postsContainer.addEventListener('click', (e) => {
         const targetId = e.target.dataset.id;
-
-        if (targetId && !watchedState.visitedPostsId.includes(targetId)) {
+        if (!targetId) return;
+        if (!watchedState.visitedPostsId.includes(targetId)) {
           watchedState.visitedPostsId.push(targetId);
-        } else if (!targetId) return;
+        }
         watchedState.postId = targetId;
       });
       setTimeout(function refresh() {

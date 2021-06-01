@@ -13,7 +13,7 @@ const parse = (data) => {
   const doc = parser.parseFromString(data, 'application/xml');
   const parsererror = doc.querySelector('parsererror');
   if (parsererror) {
-    const error = new Error('parser');
+    const error = new Error(parsererror.textContent);
     error.isParserError = true;
     throw error;
   }

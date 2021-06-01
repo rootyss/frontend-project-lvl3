@@ -4,7 +4,6 @@
   "description": "rss reader",
   "main": "src/app.js",
   "scripts": {
-    "test": "npx -n '--experimental-vm-modules --no-warnings' jest --colors",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "build-dev": "cross-env NODE_ENV=development webpack --mode development"
   },
@@ -35,14 +34,11 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@popperjs/core": "^2.9.2",
     "axios": "^0.21.1",
     "bootstrap": "^5.0.0-beta3",
     "i18next": "^20.2.4",
-    "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "on-change": "^3.0.1",
-    "popper.js": "^1.16.1",
     "yup": "^0.32.9"
   }
 }

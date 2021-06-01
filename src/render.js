@@ -128,8 +128,6 @@ export default (state, elements, i18nInstance) => onChange(state, (path) => {
       renderPostsElements(state, elements, i18nInstance);
       break;
     case 'visitedPostsId':
-      renderPostsElements(state, elements, i18nInstance);
-      break;
     case 'postId':
       renderModal(state, elements, i18nInstance);
       break;
