@@ -1,6 +1,6 @@
 import onChange from 'on-change';
 
-const getAttr = (element, values) => Object.keys(values).forEach((attr) => {
+const setAttr = (element, values) => Object.keys(values).forEach((attr) => {
   element.setAttribute(attr, values[attr]);
 });
 
@@ -63,7 +63,30 @@ const renderFeedsElements = (state, elements, i18nInstance) => {
   feedsContainer.innerHTML = '';
   feedsContainer.append(h2El, ulEl);
 };
-
+const buildLinkElement = (aElFont, option) => {
+  const [font, fontForCheck] = aElFont;
+  const { link, itemTitle, id } = option;
+  const aEl = document.createElement('A');
+  aEl.classList.add('text-decoration-none');
+  aEl.classList.add(font);
+  aEl.classList.add(fontForCheck);
+  const aElAttributes = {
+    href: link, 'data-id': id, target: '_blank', rel: 'noopener noreferrer',
+  };
+  setAttr(aEl, aElAttributes);
+  aEl.textContent = itemTitle;
+  return aEl;
+};
+const buildButtonElement = (text, id) => {
+  const buttonEl = document.createElement('BUTTON');
+  buttonEl.classList.add('btn', 'btn-primary', 'btn-sm');
+  const buttonAttr = {
+    type: 'button', 'data-id': id, 'data-bs-toggle': 'modal', 'data-bs-target': '#readme',
+  };
+  setAttr(buttonEl, buttonAttr);
+  buttonEl.textContent = text;
+  return buttonEl;
+};
 const renderPostsElements = (state, elements, i18nInstance) => {
   const { postsContainer } = elements;
   const h2El = document.createElement('H2');
@@ -74,26 +97,12 @@ const renderPostsElements = (state, elements, i18nInstance) => {
     const liEl = document.createElement('LI');
     liEl.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start');
 
-    const aEl = document.createElement('A');
-    aEl.classList.add('text-decoration-none');
-    const font = state.visitedPostsId.includes(String(id)) ? 'fw-normal' : 'fw-bold';
-    aEl.classList.add(font);
-    const fontForCheck = state.visitedPostsId.includes(String(id)) ? 'font-weight-normal' : 'font-weight-bold';
-    aEl.classList.add(fontForCheck);
-    const aElAttributes = {
-      href: link, 'data-id': id, target: '_blank', rel: 'noopener noreferrer',
-    };
+    const font = state.visitedPostsId.includes(String(id)) ? ['fw-normal', 'font-weight-normal'] : ['fw-bold', 'font-weight-bold'];
+    const text = i18nInstance.t('view');
 
-    getAttr(aEl, aElAttributes);
-    aEl.textContent = itemTitle;
+    const aEl = buildLinkElement(font, { link, itemTitle, id });
+    const buttonEl = buildButtonElement(text, id);
 
-    const buttonEl = document.createElement('BUTTON');
-    buttonEl.classList.add('btn', 'btn-primary', 'btn-sm');
-    const buttonAttr = {
-      type: 'button', 'data-id': id, 'data-bs-toggle': 'modal', 'data-bs-target': '#readme',
-    };
-    getAttr(buttonEl, buttonAttr);
-    buttonEl.textContent = i18nInstance.t('view');
     liEl.append(aEl, buttonEl);
     ulEl.append(liEl);
   });
@@ -105,7 +114,7 @@ const renderModal = (state, elements, i18nInstance) => {
   const {
     modalTitle, modalBody, closeModal, readMore,
   } = elements;
-  const [targetPost] = state.posts.filter((el) => el.id === state.postId);
+  const targetPost = state.posts.find((el) => el.id === state.postId);
   modalTitle.textContent = targetPost.itemTitle;
   modalBody.textContent = targetPost.descriptionPost;
   closeModal.textContent = i18nInstance.t('modal.close');
