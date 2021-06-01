@@ -111,6 +111,9 @@ const renderModal = (state, elements, i18nInstance) => {
   closeModal.textContent = i18nInstance.t('modal.close');
   readMore.textContent = i18nInstance.t('modal.readMore');
   readMore.setAttribute('href', targetPost.link);
+  const aEl = document.querySelector(`a[data-id="${state.postId}"]`);
+  aEl.classList.remove('fw-bold', 'font-weight-bold');
+  aEl.classList.add('fw-normal', 'font-weight-normal');
 };
 
 export default (state, elements, i18nInstance) => onChange(state, (path) => {

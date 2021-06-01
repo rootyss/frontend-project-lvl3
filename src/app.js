@@ -131,11 +131,10 @@ export default () => {
       elements.postsContainer.addEventListener('click', (e) => {
         const targetId = e.target.dataset.id;
         if (!targetId) return;
-
+        watchedState.postId = targetId;
         if (targetId && !watchedState.visitedPostsId.includes(targetId)) {
           watchedState.visitedPostsId.push(targetId);
         }
-        watchedState.postId = targetId;
       });
       setTimeout(function refresh() {
         Promise.all(loadNewPosts(watchedState)).finally(() => setTimeout(refresh, loadDelay));
